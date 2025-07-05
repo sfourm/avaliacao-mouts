@@ -1,4 +1,4 @@
-using Ambev.DeveloperEvaluation.Domain.Validation;
+using Ambev.DeveloperEvaluation.Application.Common.Validation;
 using FluentAssertions;
 using Xunit;
 

@@ -6,7 +6,7 @@ public static class Validator
 {
     public static async Task<IEnumerable<ValidationErrorDetail>> ValidateAsync<T>(T instance)
     {
-        Type validatorType = typeof(IValidator<>).MakeGenericType(typeof(T));
+        var validatorType = typeof(IValidator<>).MakeGenericType(typeof(T));
 
         if (Activator.CreateInstance(validatorType) is not IValidator validator)
         {

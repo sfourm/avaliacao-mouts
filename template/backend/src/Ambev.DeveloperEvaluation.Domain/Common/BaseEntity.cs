@@ -1,23 +1,16 @@
-﻿using Ambev.DeveloperEvaluation.Common.Validation;
-
-namespace Ambev.DeveloperEvaluation.Domain.Common;
+﻿namespace Ambev.DeveloperEvaluation.Domain.Common;
 
 public class BaseEntity : IComparable<BaseEntity>
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; }
 
-    public Task<IEnumerable<ValidationErrorDetail>> ValidateAsync()
+    public BaseEntity()
     {
-        return Validator.ValidateAsync(this);
+        Id = Guid.NewGuid();
     }
-
+    
     public int CompareTo(BaseEntity? other)
     {
-        if (other == null)
-        {
-            return 1;
-        }
-
-        return other!.Id.CompareTo(Id);
+        return other == null ? 1 : other.Id.CompareTo(Id);
     }
 }
