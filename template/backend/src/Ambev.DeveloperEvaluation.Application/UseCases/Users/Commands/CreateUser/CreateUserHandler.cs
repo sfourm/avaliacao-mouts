@@ -1,4 +1,5 @@
-﻿using Ambev.DeveloperEvaluation.Common.Security;
+﻿using Ambev.DeveloperEvaluation.Application.Common.Interfaces;
+using Ambev.DeveloperEvaluation.Application.Common.Interfaces.Services;
 using Ambev.DeveloperEvaluation.Domain.Aggregates.UserAggregate.Entities;
 using Ambev.DeveloperEvaluation.Domain.Aggregates.UserAggregate.Repositories;
 using Ambev.DeveloperEvaluation.Domain.Common.Interfaces;
@@ -14,14 +15,14 @@ public sealed class CreateUserHandler : IRequestHandler<CreateUserCommand, Creat
 {
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
-    private readonly IPasswordHasher _passwordHasher;
+    private readonly IPasswordService _passwordService;
     private readonly IUnitOfWork _unitOfWork;
     
-    public CreateUserHandler(IUserRepository userRepository, IMapper mapper, IPasswordHasher passwordHasher, IUnitOfWork unitOfWork)
+    public CreateUserHandler(IUserRepository userRepository, IMapper mapper, IPasswordService passwordService, IUnitOfWork unitOfWork)
     {
         _userRepository = userRepository;
         _mapper = mapper;
-        _passwordHasher = passwordHasher;
+        _passwordService = passwordService;
         _unitOfWork = unitOfWork;
     }
     
@@ -30,7 +31,7 @@ public sealed class CreateUserHandler : IRequestHandler<CreateUserCommand, Creat
        await ValidateUser(command, cancellationToken);
 
         var user = _mapper.Map<User>(command);
-        var password = _passwordHasher.HashPassword(command.Password);
+        var password = _passwordService.HashPassword(command.Password);
         user.SetPassword(password);
 
         await _userRepository.AddAsync(user, cancellationToken);

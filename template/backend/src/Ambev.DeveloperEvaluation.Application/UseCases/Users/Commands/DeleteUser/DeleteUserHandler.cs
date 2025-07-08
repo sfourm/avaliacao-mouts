@@ -1,6 +1,6 @@
-using Ambev.DeveloperEvaluation.Common.Exceptions;
 using Ambev.DeveloperEvaluation.Domain.Aggregates.UserAggregate.Repositories;
 using Ambev.DeveloperEvaluation.Domain.Common.Interfaces;
+using Ambev.DeveloperEvaluation.Packages.Application.Exceptions;
 using MediatR;
 
 namespace Ambev.DeveloperEvaluation.Application.UseCases.Users.Commands.DeleteUser;

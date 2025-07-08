@@ -1,9 +1,11 @@
-namespace Ambev.DeveloperEvaluation.Common.Security;
+using Ambev.DeveloperEvaluation.Application.Common.Interfaces.Services;
+
+namespace Ambev.DeveloperEvaluation.Infrastructure.Services.Auth;
 
 /// <summary>
 /// Implements password hashing functionality using BCrypt algorithm.
 /// </summary>
-public class BCryptPasswordHasher : IPasswordHasher
+public class PasswordService : IPasswordService
 {
     /// <summary>
     /// Hashes a plain text password using BCrypt algorithm.

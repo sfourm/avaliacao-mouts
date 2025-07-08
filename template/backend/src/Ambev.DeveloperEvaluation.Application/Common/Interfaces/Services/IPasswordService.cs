@@ -1,9 +1,9 @@
-namespace Ambev.DeveloperEvaluation.Common.Security;
+namespace Ambev.DeveloperEvaluation.Application.Common.Interfaces.Services;
 
 /// <summary>
 /// Provides functionality for hashing and verifying passwords.
 /// </summary>
-public interface IPasswordHasher
+public interface IPasswordService
 {
     /// <summary>
     /// Hashes a plain text password using a secure hashing algorithm.

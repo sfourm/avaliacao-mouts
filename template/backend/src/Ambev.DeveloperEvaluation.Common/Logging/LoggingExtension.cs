@@ -12,22 +12,20 @@ using System.Diagnostics;
 
 namespace Ambev.DeveloperEvaluation.Common.Logging;
 
-
-
 /// <summary> Add default Logging configuration to project. This configuration supports Serilog logs with DataDog compatible output.</summary>
 public static class LoggingExtension
 {
     /// <summary>
     /// The destructuring options builder configured with default destructurers and a custom DbUpdateExceptionDestructurer.
     /// </summary>
-    static readonly DestructuringOptionsBuilder _destructuringOptionsBuilder = new DestructuringOptionsBuilder()
+    private static readonly DestructuringOptionsBuilder DestructuringOptionsBuilder = new DestructuringOptionsBuilder()
         .WithDefaultDestructurers()
         .WithDestructurers([new DbUpdateExceptionDestructurer()]);
 
     /// <summary>
     /// A filter predicate to exclude log events with specific criteria.
     /// </summary>
-    static readonly Func<LogEvent, bool> _filterPredicate = exclusionPredicate =>
+    private static readonly Func<LogEvent, bool> FilterPredicate = exclusionPredicate =>
     {
 
         if (exclusionPredicate.Level != LogEventLevel.Information) return true;
@@ -60,8 +58,8 @@ public static class LoggingExtension
                 .Enrich.WithProperty("Environment", builder.Environment.EnvironmentName)
                 .Enrich.WithProperty("Application", builder.Environment.ApplicationName)
                 .Enrich.FromLogContext()
-                .Enrich.WithExceptionDetails(_destructuringOptionsBuilder)
-                .Filter.ByExcluding(_filterPredicate);
+                .Enrich.WithExceptionDetails(DestructuringOptionsBuilder)
+                .Filter.ByExcluding(FilterPredicate);
 
             if (Debugger.IsAttached)
             {

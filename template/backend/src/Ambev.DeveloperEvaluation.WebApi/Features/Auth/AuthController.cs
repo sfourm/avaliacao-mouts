@@ -1,7 +1,8 @@
 using Ambev.DeveloperEvaluation.Application.UseCases.Auth.Commands.AuthenticateUser;
+using Ambev.DeveloperEvaluation.Packages.WebApi.Controllers;
+using Ambev.DeveloperEvaluation.Packages.WebApi.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Auth.AuthenticateUserFeature;
 using AutoMapper;
 
@@ -11,8 +12,8 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Auth;
 /// Controller for authentication operations
 /// </summary>
 [ApiController]
-[Route("api/[controller]")]
-public class AuthController : BaseController
+[Route("api/auth")]
+public class AuthController : ApiControllerBase
 {
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
@@ -35,25 +36,15 @@ public class AuthController : BaseController
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>Authentication token if successful</returns>
     [HttpPost]
-    [ProducesResponseType(typeof(ApiResponseWithData<AuthenticateUserResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<AuthenticateUserResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> AuthenticateUser([FromBody] AuthenticateUserRequest request, CancellationToken cancellationToken)
     {
-        var validator = new AuthenticateUserRequestValidator();
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-
-        if (!validationResult.IsValid)
-            return BadRequest(validationResult.Errors);
-
         var command = _mapper.Map<AuthenticateUserCommand>(request);
         var response = await _mediator.Send(command, cancellationToken);
-
-        return Ok(new ApiResponseWithData<AuthenticateUserResponse>
-        {
-            Success = true,
-            Message = "User authenticated successfully",
-            Data = _mapper.Map<AuthenticateUserResponse>(response)
-        });
+        var result = _mapper.Map<AuthenticateUserResponse>(response);
+        
+        return Ok(result);
     }
 }

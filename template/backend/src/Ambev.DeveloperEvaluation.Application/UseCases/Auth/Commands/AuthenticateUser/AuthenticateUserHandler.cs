@@ -1,4 +1,5 @@
-using Ambev.DeveloperEvaluation.Common.Security;
+using Ambev.DeveloperEvaluation.Application.Common.Interfaces;
+using Ambev.DeveloperEvaluation.Application.Common.Interfaces.Services;
 using Ambev.DeveloperEvaluation.Domain.Aggregates.UserAggregate.Repositories;
 using Ambev.DeveloperEvaluation.Domain.Specifications;
 using MediatR;
@@ -8,24 +9,24 @@ namespace Ambev.DeveloperEvaluation.Application.UseCases.Auth.Commands.Authentic
     public class AuthenticateUserHandler : IRequestHandler<AuthenticateUserCommand, AuthenticateUserResult>
     {
         private readonly IUserRepository _userRepository;
-        private readonly IPasswordHasher _passwordHasher;
-        private readonly IJwtTokenGenerator _jwtTokenGenerator;
+        private readonly IPasswordService _passwordService;
+        private readonly IJwtService _jwtService;
 
         public AuthenticateUserHandler(
             IUserRepository userRepository,
-            IPasswordHasher passwordHasher,
-            IJwtTokenGenerator jwtTokenGenerator)
+            IPasswordService passwordService,
+            IJwtService jwtService)
         {
             _userRepository = userRepository;
-            _passwordHasher = passwordHasher;
-            _jwtTokenGenerator = jwtTokenGenerator;
+            _passwordService = passwordService;
+            _jwtService = jwtService;
         }
 
         public async Task<AuthenticateUserResult> Handle(AuthenticateUserCommand request, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetByEmailAsync(request.Email, cancellationToken);
             
-            if (user == null || !_passwordHasher.VerifyPassword(request.Password, user.Password))
+            if (user == null || !_passwordService.VerifyPassword(request.Password, user.Password))
             {
                 throw new UnauthorizedAccessException("Invalid credentials");
             }
@@ -36,7 +37,7 @@ namespace Ambev.DeveloperEvaluation.Application.UseCases.Auth.Commands.Authentic
                 throw new UnauthorizedAccessException("User is not active");
             }
 
-            var token = _jwtTokenGenerator.GenerateToken(user);
+            var token = _jwtService.GenerateToken(user);
 
             return new AuthenticateUserResult
             {

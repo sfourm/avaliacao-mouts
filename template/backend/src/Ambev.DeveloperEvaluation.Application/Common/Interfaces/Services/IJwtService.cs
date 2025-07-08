@@ -1,8 +1,8 @@
 using Ambev.DeveloperEvaluation.Domain.Aggregates.UserAggregate.Interfaces;
 
-namespace Ambev.DeveloperEvaluation.Common.Security
+namespace Ambev.DeveloperEvaluation.Application.Common.Interfaces.Services
 {
-    public interface IJwtTokenGenerator
+    public interface IJwtService
     {
         string GenerateToken(IUser user);
     }

@@ -1,16 +1,17 @@
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Ambev.DeveloperEvaluation.Application.Common.Interfaces.Services;
 using Ambev.DeveloperEvaluation.Domain.Aggregates.UserAggregate.Interfaces;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
-namespace Ambev.DeveloperEvaluation.Common.Security;
+namespace Ambev.DeveloperEvaluation.Infrastructure.Services.Auth;
 
 /// <summary>
 /// Implementation of JWT (JSON Web Token) generator.
 /// </summary>
-public class JwtTokenGenerator : IJwtTokenGenerator
+public class JwtService : IJwtService
 {
     private readonly IConfiguration _configuration;
 
@@ -18,7 +19,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
     /// Initializes a new instance of the JWT token generator.
     /// </summary>
     /// <param name="configuration">Application configuration containing the necessary keys for token generation.</param>
-    public JwtTokenGenerator(IConfiguration configuration)
+    public JwtService(IConfiguration configuration)
     {
         _configuration = configuration;
     }
@@ -40,7 +41,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
     public string GenerateToken(IUser user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_configuration["Jwt:SecretKey"]);
+        var key = Encoding.ASCII.GetBytes(_configuration["Jwt:SecretKey"] ?? string.Empty);
 
         var claims = new[]
         {

@@ -1,82 +1,33 @@
 using Ambev.DeveloperEvaluation.Application;
-using Ambev.DeveloperEvaluation.Common.HealthChecks;
-using Ambev.DeveloperEvaluation.Common.Logging;
-using Ambev.DeveloperEvaluation.Common.Security;
-using Ambev.DeveloperEvaluation.Common.Validation;
-using Ambev.DeveloperEvaluation.Infrastructure.EF.Context;
-using Ambev.DeveloperEvaluation.WebApi.Middleware;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Serilog;
+using Ambev.DeveloperEvaluation.Infrastructure;
+using Ambev.DeveloperEvaluation.Packages.Security;
+using Ambev.DeveloperEvaluation.Packages.WebApi;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
-namespace Ambev.DeveloperEvaluation.WebApi;
+var builder = WebApplication.CreateBuilder(args);
 
-public class Program
+var configuration = builder.Configuration;
+var environment = builder.Environment;
+
+builder.Services.RegisterApplicationDependencies();
+builder.Services.RegisterInfrastructureDependencies(configuration, environment);
+builder.Services.RegisterApplicationAuthentication(configuration);
+builder.Services.RegisterApplicationAuthorization(options =>
 {
-    public static void Main(string[] args)
-    {
-        try
-        {
-            Log.Information("Starting web application");
-
-            var builder = WebApplication.CreateBuilder(args);
-            builder.AddDefaultLogging();
-
-            builder.Services.AddControllers();
-            builder.Services.AddEndpointsApiExplorer();
-
-            builder.AddBasicHealthChecks();
-            builder.Services.AddSwaggerGen();
-
-            builder.Services.AddDbContext<DefaultContext>(options =>
-                options.UseNpgsql(
-                    builder.Configuration.GetConnectionString("DefaultConnection"),
-                    b => b.MigrationsAssembly("Ambev.DeveloperEvaluation.Infrastructure")
-                )
-            );
-
-            builder.Services.AddJwtAuthentication(builder.Configuration);
+    options.DefaultPolicy = new AuthorizationPolicyBuilder().Build();
+});
 
 
-            builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(ApplicationLayer).Assembly);
+builder.Services.RegisterApplicationApiServices(configuration);
 
-            builder.Services.AddMediatR(cfg =>
-            {
-                cfg.RegisterServicesFromAssemblies(
-                    typeof(ApplicationLayer).Assembly,
-                    typeof(Program).Assembly
-                );
-            });
+builder.Services.AddHealthChecks()
+    .RegisterApplicationApiObservability()
+    .AddNpgSql(configuration.GetConnectionString("DefaultConnection")!);
 
-            builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+var app = builder.Build();
 
-            var app = builder.Build();
-            app.UseMiddleware<ValidationExceptionMiddleware>();
+var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+app.ConfigureApplicationApiMiddleware(provider);
 
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseBasicHealthChecks();
-
-            app.MapControllers();
-
-            app.Run();
-        }
-        catch (Exception ex)
-        {
-            Log.Fatal(ex, "Application terminated unexpectedly");
-        }
-        finally
-        {
-            Log.CloseAndFlush();
-        }
-    }
-}
+app.Run();
