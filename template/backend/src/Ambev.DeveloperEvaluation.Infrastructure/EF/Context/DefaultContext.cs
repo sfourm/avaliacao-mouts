@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Ambev.DeveloperEvaluation.Domain.Aggregates.DiscountAggregate.Entities;
 using Ambev.DeveloperEvaluation.Domain.Aggregates.UserAggregate.Entities;
 using Ambev.DeveloperEvaluation.Domain.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ namespace Ambev.DeveloperEvaluation.Infrastructure.EF.Context;
 public sealed class DefaultContext(DbContextOptions<DefaultContext> options) : DbContext(options), IUnitOfWork
 {
     public DbSet<User> Users => Set<User>();
+    public DbSet<Discount> Discounts => Set<Discount>();
 
     public async Task CommitAsync(CancellationToken cancellationToken)
     {
