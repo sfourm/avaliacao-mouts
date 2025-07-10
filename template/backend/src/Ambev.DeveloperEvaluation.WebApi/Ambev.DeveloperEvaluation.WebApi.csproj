@@ -1,27 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.2">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Users\GetUser\" />
-    <Folder Include="Features\Users\DeleteUser\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\packages\Ambev.DeveloperEvaluation.Packages.Security\Ambev.DeveloperEvaluation.Packages.Security.csproj" />
-    <ProjectReference Include="..\..\..\packages\Ambev.DeveloperEvaluation.Packages.WebApi\Ambev.DeveloperEvaluation.Packages.WebApi.csproj" />
-    <ProjectReference Include="..\Ambev.DeveloperEvaluation.Infrastructure\Ambev.DeveloperEvaluation.Infrastructure.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\packages\Ambev.DeveloperEvaluation.Packages.Security\Ambev.DeveloperEvaluation.Packages.Security.csproj"/>
+        <ProjectReference Include="..\..\..\packages\Ambev.DeveloperEvaluation.Packages.WebApi\Ambev.DeveloperEvaluation.Packages.WebApi.csproj"/>
+        <ProjectReference Include="..\Ambev.DeveloperEvaluation.Infrastructure\Ambev.DeveloperEvaluation.Infrastructure.csproj"/>
+    </ItemGroup>
 
 </Project>

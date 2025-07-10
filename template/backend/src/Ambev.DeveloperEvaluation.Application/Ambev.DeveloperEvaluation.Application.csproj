@@ -1,25 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\packages\Ambev.DeveloperEvaluation.Packages.Application\Ambev.DeveloperEvaluation.Packages.Application.csproj" />
-    <ProjectReference Include="..\Ambev.DeveloperEvaluation.Domain\Ambev.DeveloperEvaluation.Domain.csproj" />
-    <ProjectReference Include="..\packages\Ambev.DeveloperEvaluation.Packages.Application\Ambev.DeveloperEvaluation.Packages.Application.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\packages\Ambev.DeveloperEvaluation.Packages.Application\Ambev.DeveloperEvaluation.Packages.Application.csproj"/>
+        <ProjectReference Include="..\Ambev.DeveloperEvaluation.Domain\Ambev.DeveloperEvaluation.Domain.csproj"/>
+        <ProjectReference Include="..\packages\Ambev.DeveloperEvaluation.Packages.Application\Ambev.DeveloperEvaluation.Packages.Application.csproj"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />    
-    <PackageReference Include="MediatR" Version="12.4.1" />
-    <PackageReference Include="OneOf" Version="3.0.271" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="13.0.1"/>
+        <PackageReference Include="MediatR" Version="13.0.0"/>
+        <PackageReference Include="OneOf" Version="3.0.271"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UseCases\" />
-    <Folder Include="UseCases\Auth\Commands\" />
-  </ItemGroup>
+    <ItemGroup>
+        <Folder Include="UseCases\"/>
+        <Folder Include="UseCases\Auth\Commands\"/>
+    </ItemGroup>
 
 </Project>

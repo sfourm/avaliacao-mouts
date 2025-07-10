@@ -1,8 +1,8 @@
 ﻿namespace Ambev.DeveloperEvaluation.Domain.Common.Interfaces;
 
-public interface IAuditableEntity
+public interface IAuditableEntity : IEntity
 {
-    DateTime Created { get; }
-    DateTime? Updated { get; }
+    DateTime CreatedAt { get; }
+    DateTime? UpdatedAt { get; }
     void Modify();
 }

@@ -9,8 +9,8 @@ namespace Ambev.DeveloperEvaluation.Infrastructure.Persistences.Repositories;
 
 public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity, IAggregateRoot
 {
-    protected readonly DefaultContext Context;
     private readonly DbSet<TEntity> _dbSet;
+    protected readonly DefaultContext Context;
 
     public BaseRepository(DefaultContext dbContext)
     {
@@ -21,10 +21,7 @@ public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where T
     public virtual async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
         var entity = await _dbSet.FindAsync([id], cancellationToken);
-        if (entity != null)
-        {
-            _dbSet.Remove(entity);
-        }
+        if (entity != null) _dbSet.Remove(entity);
     }
 
     public virtual IQueryable<TEntity> Queryable(int pageNumber = 1, int pageSize = 100)

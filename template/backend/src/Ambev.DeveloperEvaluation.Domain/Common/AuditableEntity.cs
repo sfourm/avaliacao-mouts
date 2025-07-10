@@ -1,20 +1,18 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Common.Interfaces;
+﻿namespace Ambev.DeveloperEvaluation.Domain.Common;
 
-namespace Ambev.DeveloperEvaluation.Domain.Common;
-
-public abstract class AuditableEntity : IAuditableEntity
+public abstract class AuditableEntity : BaseEntity, IAuditableEntity
 {
     protected AuditableEntity()
     {
-        Created = DateTime.UtcNow;
-        Updated = DateTime.UtcNow;
+        CreatedAt = DateTime.UtcNow;
+        UpdatedAt = DateTime.UtcNow;
     }
 
-    public DateTime Created { get; private set; }
-    public DateTime? Updated { get; private set; }
+    public DateTime CreatedAt { get; }
+    public DateTime? UpdatedAt { get; private set; }
 
     public void Modify()
     {
-        Updated = DateTime.UtcNow;
+        UpdatedAt = DateTime.UtcNow;
     }
 }

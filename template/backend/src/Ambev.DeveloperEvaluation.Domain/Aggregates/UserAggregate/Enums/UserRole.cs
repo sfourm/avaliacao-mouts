@@ -3,7 +3,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Aggregates.UserAggregate.Enums;
 public enum UserRole
 {
     None = 0,
-    Customer,    
+    Customer,
     Manager,
-    Admin,
+    Admin
 }

@@ -1,26 +1,10 @@
-﻿namespace Ambev.DeveloperEvaluation.Domain.Aggregates.UserAggregate.Interfaces
+﻿using Ambev.DeveloperEvaluation.Domain.Aggregates.UserAggregate.Enums;
+
+namespace Ambev.DeveloperEvaluation.Domain.Aggregates.UserAggregate.Interfaces;
+
+public interface IUser
 {
-    /// <summary>
-    /// Define o contrato para representação de um usuário no sistema.
-    /// </summary>
-    public interface IUser
-    {
-        /// <summary>
-        /// Obtém o identificador único do usuário.
-        /// </summary>
-        /// <returns>O ID do usuário como uma string.</returns>
-        public Guid Id { get; }
-
-        /// <summary>
-        /// Obtém o nome de usuário.
-        /// </summary>
-        /// <returns>O nome de usuário.</returns>
-        public string Username { get; }
-
-        /// <summary>
-        /// Obtém o papel/função do usuário no sistema.
-        /// </summary>
-        /// <returns>O papel do usuário como uma string.</returns>
-        public string Role { get; }
-    }
+    public Guid Id { get; }
+    public Username Username { get; }
+    public UserRole Role { get; }
 }

@@ -24,17 +24,10 @@ public class AuditableEntityInterceptor : SaveChangesInterceptor
 
     public static void UpdateEntities(DbContext? context)
     {
-        if (context == null)
-        {
-            return;
-        }
+        if (context == null) return;
 
         foreach (var entry in context.ChangeTracker.Entries<IAuditableEntity>())
-        {
             if (entry.State is EntityState.Modified or EntityState.Added || entry.HasChangedOwnedEntities())
-            {
                 entry.Entity.Modify();
-            }
-        }
     }
 }

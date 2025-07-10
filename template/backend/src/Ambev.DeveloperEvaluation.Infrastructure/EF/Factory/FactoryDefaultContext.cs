@@ -20,10 +20,8 @@ public class FactoryDefaultContext : IDesignTimeDbContextFactory<DefaultContext>
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 
         DbContextOptionsBuilder<DefaultContext> optionsBuilder = new();
-        optionsBuilder.UseNpgsql(connectionString, options =>
-        {
-            options.MigrationsAssembly(typeof(DefaultContext).Assembly.FullName);
-        });
+        optionsBuilder.UseNpgsql(connectionString,
+            options => { options.MigrationsAssembly(typeof(DefaultContext).Assembly.FullName); });
 
         return new DefaultContext(optionsBuilder.Options);
     }

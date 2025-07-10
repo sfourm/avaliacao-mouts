@@ -16,13 +16,12 @@ public static class DependencyInjection
     internal static void AddEfCore(this IServiceCollection services, IConfiguration configuration,
         IWebHostEnvironment environment)
     {
-
         services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
         services.AddDbContext<IUnitOfWork, DefaultContext>((sp, options) =>
         {
             options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>())
                 .UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
-            
+
             options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole(x =>
             {
                 x.FormatterName = environment.IsDevelopment() ? "simple" : "json";

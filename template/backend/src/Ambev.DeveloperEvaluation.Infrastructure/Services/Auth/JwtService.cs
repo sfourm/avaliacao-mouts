@@ -9,14 +9,14 @@ using Microsoft.IdentityModel.Tokens;
 namespace Ambev.DeveloperEvaluation.Infrastructure.Services.Auth;
 
 /// <summary>
-/// Implementation of JWT (JSON Web Token) generator.
+///     Implementation of JWT (JSON Web Token) generator.
 /// </summary>
 public class JwtService : IJwtService
 {
     private readonly IConfiguration _configuration;
 
     /// <summary>
-    /// Initializes a new instance of the JWT token generator.
+    ///     Initializes a new instance of the JWT token generator.
     /// </summary>
     /// <param name="configuration">Application configuration containing the necessary keys for token generation.</param>
     public JwtService(IConfiguration configuration)
@@ -25,17 +25,16 @@ public class JwtService : IJwtService
     }
 
     /// <summary>
-    /// Generates a JWT token for a specific user.
+    ///     Generates a JWT token for a specific user.
     /// </summary>
     /// <param name="user">User for whom the token will be generated.</param>
     /// <returns>Valid JWT token as string.</returns>
     /// <remarks>
-    /// The generated token includes the following claims:
-    /// - NameIdentifier (User ID)
-    /// - Name (Username)
-    /// - Role (User role)
-    /// 
-    /// The token is valid for 8 hours from the moment of generation.
+    ///     The generated token includes the following claims:
+    ///     - NameIdentifier (User ID)
+    ///     - Name (Username)
+    ///     - Role (User role)
+    ///     The token is valid for 8 hours from the moment of generation.
     /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown when user or secret key is not provided.</exception>
     public string GenerateToken(IUser user)
@@ -45,10 +44,10 @@ public class JwtService : IJwtService
 
         var claims = new[]
         {
-           new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-           new Claim(ClaimTypes.Name, user.Username),
-           new Claim(ClaimTypes.Role, user.Role)
-       };
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Name, user.Username.ToString()),
+            new Claim(ClaimTypes.Role, user.Role.ToString())
+        };
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {

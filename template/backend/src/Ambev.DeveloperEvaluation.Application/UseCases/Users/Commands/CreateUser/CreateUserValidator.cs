@@ -1,33 +1,55 @@
-﻿using Ambev.DeveloperEvaluation.Application.Common.Validation;
+﻿using Ambev.DeveloperEvaluation.Application.Common.Interfaces.Services;
+using Ambev.DeveloperEvaluation.Application.Common.Validators;
 using Ambev.DeveloperEvaluation.Domain.Aggregates.UserAggregate.Enums;
+using Ambev.DeveloperEvaluation.Domain.ValueObjects;
 using FluentValidation;
 
 namespace Ambev.DeveloperEvaluation.Application.UseCases.Users.Commands.CreateUser;
 
-/// <summary>
-/// Validator for CreateUserCommand that defines validation rules for user creation command.
-/// </summary>
 public sealed class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
 {
-    /// <summary>
-    /// Initializes a new instance of the CreateUserCommandValidator with defined validation rules.
-    /// </summary>
-    /// <remarks>
-    /// Validation rules include:
-    /// - Email: Must be in valid format (using EmailValidator)
-    /// - Username: Required, must be between 3 and 50 characters
-    /// - Password: Must meet security requirements (using PasswordValidator)
-    /// - Phone: Must match international format (+X XXXXXXXXXX)
-    /// - Status: Cannot be set to Unknown
-    /// - Role: Cannot be set to None
-    /// </remarks>
-    public CreateUserCommandValidator()
+    public CreateUserCommandValidator(IPhoneService phoneService)
     {
-        RuleFor(user => user.Email).SetValidator(new EmailValidator());
-        RuleFor(user => user.Username).NotEmpty().Length(3, 50);
-        RuleFor(user => user.Password).SetValidator(new PasswordValidator());
-        RuleFor(user => user.Phone).Matches(@"^\+?[1-9]\d{1,14}$");
-        RuleFor(user => user.Status).NotEqual(UserStatus.Unknown);
-        RuleFor(user => user.Role).NotEqual(UserRole.None);
+        RuleFor(command => command.FirstName)
+            .NotEmpty()
+            .MaximumLength(Name.MaxFirstNameLength);
+
+        RuleFor(command => command.LastName)
+            .NotEmpty()
+            .MaximumLength(Name.MaxLastNameLength);
+
+        RuleFor(command => command.Username)
+            .NotEmpty()
+            .Length(Username.MinLength, Username.MaxLength)
+            .Must(Username.IsValidUsername)
+            .WithMessage("Username contains invalid characters.");
+
+        RuleFor(user => user.Password)
+            .SetValidator(new PasswordValidator());
+
+        RuleFor(command => command.Email)
+            .NotEmpty()
+            .EmailAddress()
+            .MaximumLength(Email.MaxEmailLength);
+
+        RuleFor(command => command.Idd)
+            .NotEmpty()
+            .MaximumLength(Phone.MaxIddLength)
+            .Must(idd => idd.All(char.IsDigit))
+            .WithMessage("Idd must contain only digits.");
+
+        RuleFor(command => command.Phone)
+            .NotEmpty()
+            .MaximumLength(Phone.MaxNumberLength)
+            .Must(phone => phone.All(char.IsDigit))
+            .WithMessage("Phone number must contain only digits.")
+            .Must((command, phone) => phoneService.IsValid(command.Idd, phone))
+            .WithMessage("Invalid phone format.");
+
+        RuleFor(command => command.Status)
+            .NotEqual(UserStatus.Unknown);
+
+        RuleFor(command => command.Role)
+            .NotEqual(UserRole.None);
     }
 }

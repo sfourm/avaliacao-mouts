@@ -22,7 +22,8 @@ public static class QueryableExtensions
     {
         var includeProperties = GetIncludeProperties(filterExpression);
 
-        query = includeProperties.OfType<string>().Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+        query = includeProperties.OfType<string>()
+            .Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
 
         return query.Where(filterExpression);
     }
@@ -39,13 +40,11 @@ public static class QueryableExtensions
         var activeProperties = GetActiveProperties(filterExpression);
 
         foreach (var property in visitor.IncludeProperties
-                     .Where(property => properties.Any(x => x.Name == property?.Split('.')[0]) && 
-                                        (activeProperties.Contains(property) || 
+                     .Where(property => properties.Any(x => x.Name == property?.Split('.')[0]) &&
+                                        (activeProperties.Contains(property) ||
                                          activeProperties.Any(ap => property != null && property.StartsWith(ap + "."))))
                      .Where(property => !includeProperties.Contains(property)))
-        {
             includeProperties.Add(property);
-        }
 
         return includeProperties;
     }
@@ -58,39 +57,32 @@ public static class QueryableExtensions
         switch (binaryExpression)
         {
             case { NodeType: ExpressionType.AndAlso }:
-                {
-                    var left = GetActiveProperties(Expression.Lambda<Func<TEntity, bool>>(binaryExpression.Left, expression.Parameters));
-                    var right = GetActiveProperties(Expression.Lambda<Func<TEntity, bool>>(binaryExpression.Right, expression.Parameters));
-            
-                    foreach (var prop in left) activeProperties.Add(prop);
-                    foreach (var prop in right) activeProperties.Add(prop);
-                    break;
-                }
+            {
+                var left = GetActiveProperties(
+                    Expression.Lambda<Func<TEntity, bool>>(binaryExpression.Left, expression.Parameters));
+                var right = GetActiveProperties(
+                    Expression.Lambda<Func<TEntity, bool>>(binaryExpression.Right, expression.Parameters));
+
+                foreach (var prop in left) activeProperties.Add(prop);
+                foreach (var prop in right) activeProperties.Add(prop);
+                break;
+            }
             case { NodeType: ExpressionType.OrElse }:
-                {
-                    if (!IsNullCheck(binaryExpression.Left, out var propertyName))
-                    {
-                        return activeProperties;
-                    }
+            {
+                if (!IsNullCheck(binaryExpression.Left, out var propertyName)) return activeProperties;
 
-                    var rightProperties = GetPropertyAccessPaths(binaryExpression.Right);
-                    if (rightProperties.Contains(propertyName))
-                    {
-                        activeProperties.Add(propertyName);
-                    }
+                var rightProperties = GetPropertyAccessPaths(binaryExpression.Right);
+                if (rightProperties.Contains(propertyName)) activeProperties.Add(propertyName);
 
-                    break;
-                }
+                break;
+            }
             default:
-                {
-                    var properties = GetPropertyAccessPaths(expression.Body);
-                    foreach (var prop in properties)
-                    {
-                        activeProperties.Add(prop);
-                    }
+            {
+                var properties = GetPropertyAccessPaths(expression.Body);
+                foreach (var prop in properties) activeProperties.Add(prop);
 
-                    break;
-                }
+                break;
+            }
         }
 
         return activeProperties;
@@ -102,9 +94,7 @@ public static class QueryableExtensions
 
         if (expression is not BinaryExpression binary ||
             (binary.NodeType != ExpressionType.Equal && binary.NodeType != ExpressionType.NotEqual))
-        {
             return false;
-        }
 
         if (binary.Left is MemberExpression { Expression: ParameterExpression } leftMember &&
             IsNullConstant(binary.Right))
@@ -115,13 +105,10 @@ public static class QueryableExtensions
 
         if (binary.Right is not MemberExpression { Expression: ParameterExpression } rightMember ||
             !IsNullConstant(binary.Left))
-        {
             return false;
-        }
 
         propertyName = rightMember.Member.Name;
         return true;
-
     }
 
     private static bool IsNullConstant(Expression expression)
@@ -134,13 +121,21 @@ public static class QueryableExtensions
         var paths = new List<string?>();
         var visitor = new PropertyAccessVisitor();
         visitor.Visit(expression);
-        
-        foreach (var access in visitor.AccessPaths.Where(access => !paths.Contains(access)))
-        {
-            paths.Add(access);
-        }
-        
+
+        foreach (var access in visitor.AccessPaths.Where(access => !paths.Contains(access))) paths.Add(access);
+
         return paths;
+    }
+
+    private static IEnumerable<PropertyInfo> GetAllowedProperties(Type type)
+    {
+        return type.GetProperties().Where(prop => (prop.PropertyType.IsClass && prop.PropertyType != typeof(string)) ||
+                                                  (prop.PropertyType.IsGenericType &&
+                                                   (prop.PropertyType.GetGenericTypeDefinition() == typeof(List<>) ||
+                                                    prop.PropertyType.GetGenericTypeDefinition() ==
+                                                    typeof(IReadOnlyCollection<>) ||
+                                                    prop.PropertyType.GetGenericTypeDefinition() ==
+                                                    typeof(IEnumerable<>))));
     }
 
     private class PropertyAccessVisitor : ExpressionVisitor
@@ -157,26 +152,12 @@ public static class QueryableExtensions
             {
                 var innerVisitor = new PropertyAccessVisitor();
                 innerVisitor.Visit(node.Expression);
-                
-                foreach (var path in innerVisitor.AccessPaths)
-                {
-                    AccessPaths.Add($"{path}.{node.Member.Name}");
-                }
+
+                foreach (var path in innerVisitor.AccessPaths) AccessPaths.Add($"{path}.{node.Member.Name}");
             }
-            
+
             return base.VisitMember(node);
         }
-    }
-
-    private static IEnumerable<PropertyInfo> GetAllowedProperties(Type type)
-    {
-        return type.GetProperties().Where(prop => (prop.PropertyType.IsClass && prop.PropertyType != typeof(string)) ||
-                                                  (prop.PropertyType.IsGenericType &&
-                                                   (prop.PropertyType.GetGenericTypeDefinition() == typeof(List<>) ||
-                                                    prop.PropertyType.GetGenericTypeDefinition() ==
-                                                    typeof(IReadOnlyCollection<>) ||
-                                                    prop.PropertyType.GetGenericTypeDefinition() ==
-                                                    typeof(IEnumerable<>))));
     }
 
     private class IncludeVisitor : ExpressionVisitor

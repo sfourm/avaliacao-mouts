@@ -1,153 +1,122 @@
 using Ambev.DeveloperEvaluation.Domain.Aggregates.UserAggregate.Entities;
 using Ambev.DeveloperEvaluation.Domain.Aggregates.UserAggregate.Enums;
+using Ambev.DeveloperEvaluation.Domain.ValueObjects;
 using Bogus;
 
 namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities.TestData;
 
 /// <summary>
-/// Provides methods for generating test data using the Bogus library.
-/// This class centralizes all test data generation to ensure consistency
-/// across test cases and provide both valid and invalid data scenarios.
+///     Provides methods for generating test data using the Bogus library.
+///     This class centralizes all test data generation to ensure consistency
+///     across test cases and provide both valid and invalid data scenarios.
 /// </summary>
 public static class UserTestData
 {
-    /// <summary>
-    /// Configures the Faker to generate valid User entities.
-    /// The generated users will have valid:
-    /// - Username (using internet usernames)
-    /// - Password (meeting complexity requirements)
-    /// - Email (valid format)
-    /// - Phone (Brazilian format)
-    /// - Status (Active or Suspended)
-    /// - Role (Customer or Admin)
-    /// </summary>
     private static readonly Faker<User> UserFaker = new Faker<User>()
-        .RuleFor(u => u.Username, f => f.Internet.UserName())
-        .RuleFor(u => u.Password, f => $"Test@{f.Random.Number(100, 999)}")
-        .RuleFor(u => u.Email, f => f.Internet.Email())
-        .RuleFor(u => u.Phone, f => $"+55{f.Random.Number(11, 99)}{f.Random.Number(100000000, 999999999)}")
-        .RuleFor(u => u.Status, f => f.PickRandom(UserStatus.Active, UserStatus.Suspended))
-        .RuleFor(u => u.Role, f => f.PickRandom(UserRole.Customer, UserRole.Admin));
+        .CustomInstantiator(f => new User(
+            new Name(f.Person.FirstName, f.Person.LastName),
+            new Email(f.Internet.Email()),
+            new Phone("55", f.Phone.PhoneNumber("###########")),
+            new Username(f.Internet.UserName()),
+            new Password($"Test@{f.Random.Number(100, 999)}"),
+            f.PickRandom(UserRole.Customer, UserRole.Admin),
+            f.PickRandom(UserStatus.Active, UserStatus.Suspended, UserStatus.Inactive)
+        ))
+        .RuleFor(u => u.Status, f => f.PickRandom(UserStatus.Active, UserStatus.Suspended));
 
     /// <summary>
-    /// Generates a valid User entity with randomized data.
-    /// The generated user will have all properties populated with valid values
-    /// that meet the system's validation requirements.
+    ///     Generates a valid User entity with randomized data.
     /// </summary>
-    /// <returns>A valid User entity with randomly generated data.</returns>
     public static User GenerateValidUser()
     {
         return UserFaker.Generate();
     }
 
     /// <summary>
-    /// Generates a valid email address using Faker.
-    /// The generated email will:
-    /// - Follow the standard email format (user@domain.com)
-    /// - Have valid characters in both local and domain parts
-    /// - Have a valid TLD
+    ///     Generates a valid Name value object.
     /// </summary>
-    /// <returns>A valid email address.</returns>
-    public static string GenerateValidEmail()
+    public static Name GenerateValidName()
     {
-        return new Faker().Internet.Email();
+        return new Name(new Faker().Person.FirstName, new Faker().Person.LastName);
     }
 
     /// <summary>
-    /// Generates a valid password that meets all complexity requirements.
-    /// The generated password will have:
-    /// - At least 8 characters
-    /// - At least one uppercase letter
-    /// - At least one lowercase letter
-    /// - At least one number
-    /// - At least one special character
+    ///     Generates a valid email address.
     /// </summary>
-    /// <returns>A valid password meeting all complexity requirements.</returns>
-    public static string GenerateValidPassword()
+    public static Email GenerateValidEmail()
     {
-        return $"Test@{new Faker().Random.Number(100, 999)}";
+        return new Email(new Faker().Internet.Email());
     }
 
     /// <summary>
-    /// Generates a valid Brazilian phone number.
-    /// The generated phone number will:
-    /// - Start with country code (+55)
-    /// - Have a valid area code (11-99)
-    /// - Have 9 digits for the phone number
-    /// - Follow the format: +55XXXXXXXXXXXX
+    ///     Generates a valid Brazilian phone number.
     /// </summary>
-    /// <returns>A valid Brazilian phone number.</returns>
-    public static string GenerateValidPhone()
+    public static Phone GenerateValidPhone()
     {
-        var faker = new Faker();
-        return $"+55{faker.Random.Number(11, 99)}{faker.Random.Number(100000000, 999999999)}";
+        return new Phone("55", new Faker().Phone.PhoneNumber("###########"));
     }
 
     /// <summary>
-    /// Generates a valid username.
-    /// The generated username will:
-    /// - Be between 3 and 50 characters
-    /// - Use internet username conventions
-    /// - Contain only valid characters
+    ///     Generates a valid username.
     /// </summary>
-    /// <returns>A valid username.</returns>
-    public static string GenerateValidUsername()
+    public static Username GenerateValidUsername()
     {
-        return new Faker().Internet.UserName();
+        return new Username(new Faker().Internet.UserName());
     }
 
     /// <summary>
-    /// Generates an invalid email address for testing negative scenarios.
-    /// The generated email will:
-    /// - Not follow the standard email format
-    /// - Not contain the @ symbol
-    /// - Be a simple word or string
-    /// This is useful for testing email validation error cases.
+    ///     Generates a valid password meeting complexity requirements.
     /// </summary>
-    /// <returns>An invalid email address.</returns>
-    public static string GenerateInvalidEmail()
+    public static Password GenerateValidPassword()
     {
-        var faker = new Faker();
-        return faker.Lorem.Word();
+        return new Password($"Test@{new Faker().Random.Number(100, 999)}");
     }
 
     /// <summary>
-    /// Generates an invalid password for testing negative scenarios.
-    /// The generated password will:
-    /// - Not meet the minimum length requirement
-    /// - Not contain all required character types
-    /// This is useful for testing password validation error cases.
+    ///     Generates an invalid email address (missing @ symbol).
     /// </summary>
-    /// <returns>An invalid password.</returns>
-    public static string GenerateInvalidPassword()
+    public static string GenerateInvalidEmailString()
     {
         return new Faker().Lorem.Word();
     }
 
     /// <summary>
-    /// Generates an invalid phone number for testing negative scenarios.
-    /// The generated phone number will:
-    /// - Not follow the Brazilian phone number format
-    /// - Not have the correct length
-    /// - Not start with the country code
-    /// This is useful for testing phone validation error cases.
+    ///     Generates an invalid password (too short).
     /// </summary>
-    /// <returns>An invalid phone number.</returns>
-    public static string GenerateInvalidPhone()
+    public static string GenerateInvalidPasswordString()
+    {
+        return new Faker().Random.String2(5);
+    }
+
+    /// <summary>
+    ///     Generates an invalid phone number (wrong format).
+    /// </summary>
+    public static string GenerateInvalidPhoneString()
     {
         return new Faker().Random.AlphaNumeric(5);
     }
 
     /// <summary>
-    /// Generates a username that exceeds the maximum length limit.
-    /// The generated username will:
-    /// - Be longer than 50 characters
-    /// - Contain random alphanumeric characters
-    /// This is useful for testing username length validation error cases.
+    ///     Generates a username that exceeds maximum length.
     /// </summary>
-    /// <returns>A username that exceeds the maximum length limit.</returns>
-    public static string GenerateLongUsername()
+    public static string GenerateLongUsernameString()
     {
-        return new Faker().Random.String2(51);
+        return new Faker().Random.String2(Username.MaxLength + 1);
+    }
+
+    /// <summary>
+    ///     Generates a first name that exceeds maximum length.
+    /// </summary>
+    public static string GenerateLongFirstNameString()
+    {
+        return new Faker().Random.String2(Name.MaxFirstNameLength + 1);
+    }
+
+    /// <summary>
+    ///     Generates a last name that exceeds maximum length.
+    /// </summary>
+    public static string GenerateLongLastNameString()
+    {
+        return new Faker().Random.String2(Name.MaxLastNameLength + 1);
     }
 }

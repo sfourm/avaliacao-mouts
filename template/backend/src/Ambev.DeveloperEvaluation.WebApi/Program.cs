@@ -2,6 +2,7 @@ using Ambev.DeveloperEvaluation.Application;
 using Ambev.DeveloperEvaluation.Infrastructure;
 using Ambev.DeveloperEvaluation.Packages.Security;
 using Ambev.DeveloperEvaluation.Packages.WebApi;
+using Ambev.DeveloperEvaluation.WebApi.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
@@ -10,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 var environment = builder.Environment;
 
+builder.Services.AddCustomExceptions();
 builder.Services.RegisterApplicationDependencies();
 builder.Services.RegisterInfrastructureDependencies(configuration, environment);
 builder.Services.RegisterApplicationAuthentication(configuration);

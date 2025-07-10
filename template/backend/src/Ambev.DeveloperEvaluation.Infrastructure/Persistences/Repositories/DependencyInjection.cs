@@ -1,4 +1,4 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Aggregates.UserAggregate.Repositories;
+﻿using Ambev.DeveloperEvaluation.Domain.Aggregates.UserAggregate.Interfaces;
 using Ambev.DeveloperEvaluation.Infrastructure.Persistences.Repositories.Users;
 using Microsoft.Extensions.DependencyInjection;
 
