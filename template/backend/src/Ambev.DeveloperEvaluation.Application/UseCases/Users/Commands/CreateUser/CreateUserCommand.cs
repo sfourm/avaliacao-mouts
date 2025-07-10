@@ -12,6 +12,5 @@ public sealed record CreateUserCommand : IRequest<CreateUserResponse>
     public string Idd { get; init; } = string.Empty;
     public string Phone { get; init; } = string.Empty;
     public string Email { get; init; } = string.Empty;
-    public UserStatus Status { get; init; }
     public UserRole Role { get; init; }
 }

@@ -7,12 +7,9 @@ namespace Ambev.DeveloperEvaluation.Infrastructure.Persistences.Repositories.Use
 
 public class UserRepository(DefaultContext context) : BaseRepository<User>(context), IUserRepository
 {
-    /// <summary>
-    ///     Retrieves a user by their email address
-    /// </summary>
-    public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
+    public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken)
     {
         return await Context.Users
-            .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
+            .FirstOrDefaultAsync(u => u.Email.Address == email, cancellationToken);
     }
 }

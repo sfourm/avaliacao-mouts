@@ -1,4 +1,5 @@
 using Ambev.DeveloperEvaluation.Application.Common.Interfaces.Services;
+using Ambev.DeveloperEvaluation.Domain.ValueObjects;
 
 namespace Ambev.DeveloperEvaluation.Infrastructure.Services.Auth;
 

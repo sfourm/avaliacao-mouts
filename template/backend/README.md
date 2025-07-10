@@ -20,7 +20,7 @@ To __install__ EF:
 
 ```powershell
 dotnet tool install --global dotnet-ef
-```[Ambev.DeveloperEvaluation.Unit.csproj](Tests/Ambev.DeveloperEvaluation.Unit/Ambev.DeveloperEvaluation.Unit.csproj)
+```
 
 To __add__ migrations:
 

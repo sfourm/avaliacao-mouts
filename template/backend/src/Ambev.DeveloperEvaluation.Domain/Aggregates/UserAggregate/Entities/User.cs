@@ -26,8 +26,8 @@ public class User : AuditableEntity, IUser, IAggregateRoot
     public Phone Phone { get; private set; } = null!;
     public Password Password { get; private set; } = null!;
     public UserStatus Status { get; private set; }
-    public Username Username { get; } = null!;
-    public UserRole Role { get; }
+    public Username Username { get;  private set; } = null!;
+    public UserRole Role { get;  private set; }
 
     public void Activate()
     {

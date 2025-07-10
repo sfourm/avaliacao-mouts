@@ -46,9 +46,6 @@ public sealed class CreateUserCommandValidator : AbstractValidator<CreateUserCom
             .Must((command, phone) => phoneService.IsValid(command.Idd, phone))
             .WithMessage("Invalid phone format.");
 
-        RuleFor(command => command.Status)
-            .NotEqual(UserStatus.Unknown);
-
         RuleFor(command => command.Role)
             .NotEqual(UserRole.None);
     }

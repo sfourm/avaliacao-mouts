@@ -16,6 +16,7 @@ public sealed class DefaultContext(DbContextOptions<DefaultContext> options) : D
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(modelBuilder);
     }

@@ -1,6 +1,8 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Common.Interfaces;
+﻿using Ambev.DeveloperEvaluation.Domain.Aggregates.UserAggregate.Events;
+using Ambev.DeveloperEvaluation.Domain.Common.Interfaces;
 using Ambev.DeveloperEvaluation.Infrastructure.Messaging.Bases;
 using Ambev.DeveloperEvaluation.Infrastructure.Messaging.Configuration;
+using Ambev.DeveloperEvaluation.Infrastructure.Messaging.Consumers;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +20,7 @@ public static class DependencyInjection
 
         services.AddMassTransit(x =>
         {
-            ConfigureConsumers(x, masstransit!);
+            ConfigureConsumers(x);
 
             x.UsingRabbitMq((context, cfg) =>
             {
@@ -32,15 +34,15 @@ public static class DependencyInjection
         return services;
     }
 
-    private static void ConfigureConsumers(IRegistrationConfigurator configurator, MessagingConfiguration masstransit)
+    private static void ConfigureConsumers(IRegistrationConfigurator configurator)
     {
-        //configurator.AddConsumer<ProcessOrderConsumer>();
+        configurator.AddConsumer<UserRegisteredConsumer>();
     }
 
     private static void ConfigureRabbitMqEndpoints(IBusRegistrationContext context, IRabbitMqBusFactoryConfigurator cfg,
         Consumer consumerConfig)
     {
-        //ConfigureEndpoint<ProcessOrderMessage, ProcessOrderConsumer>(cfg, context, consumerConfig);
+        ConfigureEndpoint<UserRegisteredEvent, UserRegisteredConsumer>(cfg, context, consumerConfig);
     }
 
     private static void ConfigureRabbitMqBroker(IRabbitMqBusFactoryConfigurator cfg, BrokerConfiguration broker)

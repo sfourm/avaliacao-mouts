@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Ambev.DeveloperEvaluation.Application;
 using Ambev.DeveloperEvaluation.Infrastructure;
 using Ambev.DeveloperEvaluation.Packages.Security;
@@ -17,7 +18,9 @@ builder.Services.RegisterInfrastructureDependencies(configuration, environment);
 builder.Services.RegisterApplicationAuthentication(configuration);
 builder.Services.RegisterApplicationAuthorization(options =>
 {
-    options.DefaultPolicy = new AuthorizationPolicyBuilder().Build();
+    options.DefaultPolicy = new AuthorizationPolicyBuilder()
+        .RequireClaim(ClaimTypes.NameIdentifier)
+        .Build();
 });
 
 

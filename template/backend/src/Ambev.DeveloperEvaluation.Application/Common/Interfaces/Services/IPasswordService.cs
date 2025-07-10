@@ -1,3 +1,5 @@
+using Ambev.DeveloperEvaluation.Domain.ValueObjects;
+
 namespace Ambev.DeveloperEvaluation.Application.Common.Interfaces.Services;
 
 /// <summary>

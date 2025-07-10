@@ -22,9 +22,9 @@ public class PasswordValidator : AbstractValidator<string>
             Password.ValidatePasswordRules(password);
             return true;
         }
-        catch (RuleViolationDomainException ex)
+        catch (RuleViolationDomainException)
         {
-            throw new ValidationException(ex.Message);
+            return false;
         }
     }
 }
