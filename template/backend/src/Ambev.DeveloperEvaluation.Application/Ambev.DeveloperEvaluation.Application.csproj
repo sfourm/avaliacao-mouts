@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\packages\Ambev.DeveloperEvaluation.Packages.Application\Ambev.DeveloperEvaluation.Packages.Application.csproj" />
     <ProjectReference Include="..\Ambev.DeveloperEvaluation.Domain\Ambev.DeveloperEvaluation.Domain.csproj" />
     <ProjectReference Include="..\packages\Ambev.DeveloperEvaluation.Packages.Application\Ambev.DeveloperEvaluation.Packages.Application.csproj" />
   </ItemGroup>

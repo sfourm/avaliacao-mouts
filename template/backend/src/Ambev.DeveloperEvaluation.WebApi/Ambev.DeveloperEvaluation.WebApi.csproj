@@ -19,8 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\packages\Ambev.DeveloperEvaluation.Packages.Security\Ambev.DeveloperEvaluation.Packages.Security.csproj" />
+    <ProjectReference Include="..\..\..\packages\Ambev.DeveloperEvaluation.Packages.WebApi\Ambev.DeveloperEvaluation.Packages.WebApi.csproj" />
     <ProjectReference Include="..\Ambev.DeveloperEvaluation.Infrastructure\Ambev.DeveloperEvaluation.Infrastructure.csproj" />
-    <ProjectReference Include="..\packages\Ambev.DeveloperEvaluation.Packages.WebApi\Ambev.DeveloperEvaluation.Packages.WebApi.csproj" />
   </ItemGroup>
 
 </Project>

@@ -25,7 +25,8 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Ambev.DeveloperEvaluation.Application\Ambev.DeveloperEvaluation.Application.csproj" />
 	</ItemGroup>
+	
 	<ItemGroup>
-	  <Folder Include="Cache\" />
+	  <Folder Include="Messaging\" />
 	</ItemGroup>
 </Project>
