@@ -8,14 +8,6 @@ namespace Ambev.DeveloperEvaluation.Infrastructure.Persistences.Extensions;
 
 public static class QueryableExtensions
 {
-    public static IQueryable<TEntity> IncludeAll<TEntity>(this IQueryable<TEntity> query)
-        where TEntity : BaseEntity, IAggregateRoot
-    {
-        var properties = GetAllowedProperties(typeof(TEntity));
-
-        return properties.Aggregate(query, (current, property) => current.Include(property.Name));
-    }
-
     public static IQueryable<TEntity> IncludeWithFilter<TEntity>(this IQueryable<TEntity> query,
         Expression<Func<TEntity, bool>> filterExpression)
         where TEntity : class, IAggregateRoot

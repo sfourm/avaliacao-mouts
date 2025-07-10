@@ -43,12 +43,7 @@ public class User : AuditableEntity, IUser, IAggregateRoot
     {
         Status = UserStatus.Suspended;
     }
-
-    public void SetPassword(string password)
-    {
-        Password = password;
-    }
-
+    
     public bool IsSatisfiedBy()
     {
         return Status == UserStatus.Active;
