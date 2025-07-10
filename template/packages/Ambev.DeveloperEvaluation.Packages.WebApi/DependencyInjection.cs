@@ -8,8 +8,6 @@ using Ambev.DeveloperEvaluation.Packages.WebApi.Documentation;
 using Ambev.DeveloperEvaluation.Packages.WebApi.Filters;
 using Ambev.DeveloperEvaluation.Packages.WebApi.Observability;
 using AspNetCore.Scalar;
-using FluentValidation.AspNetCore;
-using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
@@ -39,9 +37,7 @@ public static class DependencyInjection
         services
             .AddEndpointsApiExplorer()
             .AddRouting(options => options.LowercaseUrls = true);
-
-        services.AddFluentValidationClientsideAdapters();
-        services.AddFluentValidationAutoValidation();
+        
         services.AddDefaultExceptionHandlers();
 
         services
@@ -74,9 +70,7 @@ public static class DependencyInjection
         services
             .AddSwaggerGen()
             .ConfigureOptions<ConfigureSwaggerOptions>();
-
-        if (settings.EnableSwaggerFluentValidation) services.AddFluentValidationRulesToSwagger();
-
+        
         return services;
     }
 

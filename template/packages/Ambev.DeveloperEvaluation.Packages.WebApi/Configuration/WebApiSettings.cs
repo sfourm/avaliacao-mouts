@@ -44,11 +44,6 @@ public class WebApiSettings
     public List<Server> Servers { get; set; } = [];
 
     /// <summary>
-    ///     Enables and uses FluentValidation rules instead of ComponentModel attributes to define swagger schema.
-    /// </summary>
-    public bool EnableSwaggerFluentValidation { get; set; } = false;
-
-    /// <summary>
     ///     Enables the use of HTTPS redirection middleware.
     /// </summary>
     public bool UseHttpsRedirection { get; set; } = true;
