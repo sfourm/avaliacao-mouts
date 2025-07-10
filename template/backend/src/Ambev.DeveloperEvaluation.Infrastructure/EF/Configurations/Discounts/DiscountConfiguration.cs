@@ -10,7 +10,6 @@ public class DiscountConfiguration : IEntityTypeConfiguration<Discount>
     {
         builder.ToTable("discounts");
 
-        // Configure properties
         builder.Property(d => d.Name)
             .HasColumnName("name")
             .HasColumnType($"character varying({Discount.MaxLengthName})")
@@ -34,14 +33,12 @@ public class DiscountConfiguration : IEntityTypeConfiguration<Discount>
             .HasColumnType("decimal(18,2)")
             .IsRequired();
 
-        // Configure DiscountType enum
         builder.Property(d => d.Type)
             .HasColumnName("type")
             .HasConversion<string>()
             .HasColumnType("character varying(20)")
             .IsRequired();
 
-        // Configure dates
         builder.Property(d => d.StartDt)
             .HasColumnName("start_date")
             .HasColumnType("timestamp with time zone")
@@ -52,7 +49,6 @@ public class DiscountConfiguration : IEntityTypeConfiguration<Discount>
             .HasColumnType("timestamp with time zone")
             .IsRequired();
 
-        // Configure boolean flags
         builder.Property(d => d.IsActive)
             .HasColumnName("is_active")
             .HasColumnType("boolean")
@@ -63,7 +59,6 @@ public class DiscountConfiguration : IEntityTypeConfiguration<Discount>
             .HasColumnType("boolean")
             .HasDefaultValue(false);
 
-        // Configure optional numeric fields
         builder.Property(d => d.MaxUses)
             .HasColumnName("max_uses")
             .HasColumnType("integer");
@@ -72,7 +67,6 @@ public class DiscountConfiguration : IEntityTypeConfiguration<Discount>
             .HasColumnName("min_order_value")
             .HasColumnType("integer");
 
-        // Configure indexes
         builder.HasIndex(d => d.Code).IsUnique();
         builder.HasIndex(d => d.Name);
         builder.HasIndex(d => d.IsActive);

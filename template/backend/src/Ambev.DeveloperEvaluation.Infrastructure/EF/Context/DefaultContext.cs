@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Ambev.DeveloperEvaluation.Domain.Aggregates.DiscountAggregate.Entities;
+using Ambev.DeveloperEvaluation.Domain.Aggregates.ProductAggregate.Entities;
 using Ambev.DeveloperEvaluation.Domain.Aggregates.UserAggregate.Entities;
 using Ambev.DeveloperEvaluation.Domain.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ public sealed class DefaultContext(DbContextOptions<DefaultContext> options) : D
 {
     public DbSet<User> Users => Set<User>();
     public DbSet<Discount> Discounts => Set<Discount>();
+    public DbSet<Product> Products => Set<Product>();
 
     public async Task CommitAsync(CancellationToken cancellationToken)
     {

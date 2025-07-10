@@ -6,6 +6,5 @@
     </PropertyGroup>
     <ItemGroup>
       <Folder Include="Aggregates\OrderAggregate\" />
-      <Folder Include="Aggregates\ProductAggregate\" />
     </ItemGroup>
 </Project>

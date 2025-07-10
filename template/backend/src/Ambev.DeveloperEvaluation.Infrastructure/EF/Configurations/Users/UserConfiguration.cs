@@ -11,7 +11,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         builder.ToTable("users");
 
-        // Status and Role (enums)
         builder.Property(u => u.Status)
             .HasColumnName("user_status")
             .HasConversion<string>()
@@ -24,7 +23,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasColumnType("character varying(20)")
             .IsRequired();
 
-        // OwnsOne for Name
         builder.OwnsOne(u => u.Name, e =>
         {
             e.Property(n => n.FirstName)
@@ -40,7 +38,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 .IsRequired();
         });
 
-        // OwnsOne for Username
         builder.OwnsOne(u => u.Username, e =>
         {
             e.Property(u => u.Value)
@@ -52,7 +49,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             e.HasIndex(u => u.Value).IsUnique();
         });
 
-        // OwnsOne for Password
         builder.OwnsOne(u => u.Password, e =>
         {
             e.Property(p => p.Value)
@@ -62,7 +58,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 .IsRequired();
         });
 
-        // OwnsOne for Email
         builder.OwnsOne(u => u.Email, e =>
         {
             e.Property(email => email.Address)
@@ -74,7 +69,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             e.HasIndex(email => email.Address).IsUnique();
         });
 
-        // OwnsOne for Phone
         builder.OwnsOne(u => u.Phone, e =>
         {
             e.Property(p => p.Idd)
