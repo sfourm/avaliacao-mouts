@@ -31,7 +31,7 @@ dotnet ef migrations add InitialMigration --startup-project .\src\Ambev.Develope
 To __execute__ migrations:
 
 ```powershell
-dotnet ef database update --startup-project .\src\WebApi\WebApi.csproj --project .\src\Infrastructure\Infrastructure.csproj
+dotnet ef database update --startup-project .\src\Ambev.DeveloperEvaluation.WebApi\Ambev.DeveloperEvaluation.WebApi.csproj --project .\src\Ambev.DeveloperEvaluation.Infrastructure\Ambev.DeveloperEvaluation.Infrastructure.csproj
 ```
 
 ```information
