@@ -1,6 +1,7 @@
 ﻿using Ambev.DeveloperEvaluation.Application.UseCases.Users.Commands.CreateUser;
 using Ambev.DeveloperEvaluation.Application.UseCases.Users.Commands.DeleteUser;
 using Ambev.DeveloperEvaluation.Application.UseCases.Users.Queries.GetUser;
+using Ambev.DeveloperEvaluation.Application.UseCases.Users.Queries.GetUsers;
 using Ambev.DeveloperEvaluation.Packages.WebApi.Controllers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -54,6 +55,26 @@ public class UsersController : ApiControllerBase
     public async Task<IActionResult> GetUser([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new GetUserQuery(id), cancellationToken);
+
+        return Ok(response);
+    }
+    
+    /// <summary>
+    ///     Retrieves a list of all users.
+    /// </summary>
+    /// <remarks>
+    ///     This endpoint allows you to retrieve a list of all users in the system.
+    /// </remarks>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <param name="query">The search criteria, including optional date range and pagination parameters.</param>
+    /// <returns>A list of all users.</returns>
+    [HttpGet]
+    [ProducesResponseType(typeof(GetUserResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetUsers([FromQuery] GetUsersQuery query, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(query, cancellationToken);
 
         return Ok(response);
     }
