@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.0.0"/>
+        <PackageReference Include="FluentValidation" Version="11.0.0"/>
+        <PackageReference Include="MediatR" Version="13.0.0"/>
+        <PackageReference Include="OpenTelemetry" Version="1.12.0"/>
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.12.0"/>
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.12.0"/>
+        <PackageReference Include="Npgsql.OpenTelemetry" Version="8.0.3"/>
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.7"/>
+
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Ambev.DeveloperEvaluation.Packages.Security\Ambev.DeveloperEvaluation.Packages.Security.csproj"/>
+    </ItemGroup>
+
+</Project>

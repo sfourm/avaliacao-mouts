@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+        <PackageReference Include="MicroElements.Swashbuckle.FluentValidation" Version="6.1.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="7.3.1"/>
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="7.3.1"/>
+        <PackageReference Include="AspNetCore.Scalar" Version="1.1.8"/>
+        <PackageReference Include="System.Text.Encodings.Web" Version="8.0.2"/>
+        <PackageReference Include="System.Text.Json" Version="8.0.2"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Ambev.DeveloperEvaluation.Packages.Application\Ambev.DeveloperEvaluation.Packages.Application.csproj"/>
+    </ItemGroup>
+
+</Project>
