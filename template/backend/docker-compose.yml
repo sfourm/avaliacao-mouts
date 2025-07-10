@@ -1,14 +1,26 @@
-version: '3.8'
-
 services:
   ambev.developerevaluation.database:
-    container_name: ambev_developer_evaluation_database
-    image: postgres:13
-
+    image: postgres:16.2
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_DB: developer_evaluation
-      POSTGRES_USER: developer
-      POSTGRES_PASSWORD: ev@luAt10n
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: root
+    volumes:
+      - database_data:/var/lib/postgresql/data
+  
+  ambev.developerevaluation.messaging:
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
     ports:
-      - "5432"
-    restart: unless-stopped
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - messaging_data:/var/lib/rabbitmq
+
+volumes:
+  database_data:
+  messaging_data:
