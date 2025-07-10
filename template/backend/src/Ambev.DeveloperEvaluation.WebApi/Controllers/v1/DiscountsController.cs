@@ -83,7 +83,7 @@ public class DiscountsController : ApiControllerBase
     [HttpGet("{discountId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetDiscountById(
+    public async Task<IActionResult> GetDiscount(
         [FromRoute] Guid discountId,
         CancellationToken cancellationToken)
     {
@@ -97,9 +97,9 @@ public class DiscountsController : ApiControllerBase
     /// <param name="query">The search criteria.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A paginated list of discounts.</returns>
-    [HttpGet("search")]
+    [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> SearchDiscounts(
+    public async Task<IActionResult> GetDiscounts(
         [FromQuery] GetDiscountsQuery query,
         CancellationToken cancellationToken)
     {
